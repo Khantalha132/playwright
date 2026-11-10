@@ -1,13 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
 import 'dotenv/config';
 
+declare const process: {
+  env?: Record<string, string | undefined>;
+};
+
+const env = process.env ?? {};
+
 export default defineConfig({
-  testDir: './tests',
+  testDir: './e2e',
   fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
+  retries: env.CI ? 2 : 0,
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
-    baseURL: process.env.BASE_URL ?? 'https://www.tykstore.com',
+    baseURL: env.BASE_URL ?? 'https://www.tykstore.com',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
