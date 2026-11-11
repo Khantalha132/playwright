@@ -1,16 +1,9 @@
 {
   "name": "playwright",
   "version": "1.0.0",
-  "description": "Universal Playwright login helper and test",
+  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "playwright test",
-    "test:login": "playwright test tests/login.spec.ts --headed",
-    "test:login:headless": "playwright test tests/login.spec.ts",
-    "test:login:debug": "playwright test tests/login.spec.ts --headed --debug",
-    "report": "playwright show-report",
-    "install:browsers": "playwright install chromium"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Khantalha132/playwright.git"
@@ -25,7 +18,9 @@
   "homepage": "https://github.com/Khantalha132/playwright#readme",
   "devDependencies": {
     "@playwright/test": "^1.65.0",
-    "@types/node": "^26.6.6",
-    "dotenv": "^16.4.5"
+    "@types/node": "^26.6.6"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10"
   }
 }
