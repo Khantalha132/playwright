@@ -1,6 +1,10 @@
 import { test, expect } from '@playwright/test';
 import { getLoginConfig, loginToApp } from './loginHelper';
 
+declare const process: {
+  env: Record<string, string | undefined>;
+};
+
 const { url, username, password, successUrl, successSelector } = getLoginConfig();
 
 test.describe('Universal login', () => {

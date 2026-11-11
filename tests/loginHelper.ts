@@ -114,13 +114,16 @@ const ERROR_SELECTORS = [
  * NOTE: deliberately does NOT read USERNAME/PASSWORD — on Windows `USERNAME` is the OS account name.
  */
 export function getLoginConfig(): LoginConfig {
-  const successUrl = process.env.LOGIN_SUCCESS_URL;
+  const env = (globalThis as typeof globalThis & {
+    process?: { env?: Record<string, string | undefined> };
+  }).process?.env ?? {};
+  const successUrl = env.LOGIN_SUCCESS_URL;
   return {
-    url: process.env.LOGIN_URL || DEFAULT_URL,
-    username: process.env.LOGIN_USERNAME,
-    password: process.env.LOGIN_PASSWORD,
+    url: env.LOGIN_URL || DEFAULT_URL,
+    username: env.LOGIN_USERNAME,
+    password: env.LOGIN_PASSWORD,
     successUrl: successUrl ? new RegExp(successUrl, 'i') : undefined,
-    successSelector: process.env.LOGIN_SUCCESS_SELECTOR || undefined,
+    successSelector: env.LOGIN_SUCCESS_SELECTOR || undefined,
   };
 }
 
