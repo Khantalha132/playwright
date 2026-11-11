@@ -1,47 +1,38 @@
 import { defineConfig, devices } from '@playwright/test';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
 
-declare const process: {
-  env?: Record<string, string | undefined>;
-};
+// Loads LOGIN_URL / LOGIN_USERNAME / LOGIN_PASSWORD from .env (ignored by git).
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-const env = process.env ?? {};
+const allBrowsers = process.env.ALL_BROWSERS === 'true';
 
 export default defineConfig({
-  testDir: './e2e',
+  testDir: './tests',
+  timeout: 90_000,
+  expect: { timeout: 10_000 },
   fullyParallel: true,
-  retries: env.CI ? 2 : 0,
-  reporter: [['html', { open: 'never' }], ['list']],
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [['list'], ['html', { open: 'never' }]],
+
   use: {
-    baseURL: env.BASE_URL ?? 'https://www.tykstore.com',
-    trace: 'on-first-retry',
+    actionTimeout: 15_000,
+    navigationTimeout: 60_000,
+    trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
+
   projects: [
-    // Logs in once and saves the session
-    { name: 'setup', testMatch: /auth\.setup\.ts/ },
-
-    // Anonymous tests
-    {
-      name: 'public',
-      testMatch: /(public|login)\.spec\.ts/,
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    // Logged-in tests reuse the saved session
-    {
-      name: 'authenticated',
-      testMatch: /app\.spec\.ts/,
-      dependencies: ['setup'],
-      use: { ...devices['Desktop Chrome'], storageState: 'playwright/.auth/user.json' },
-    },
-
-    // Responsive checks
-    {
-      name: 'mobile',
-      testMatch: /public\.spec\.ts/,
-      use: { ...devices['Pixel 7'] },
-    },
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // Extra browsers are opt-in (ALL_BROWSERS=true) so one run = one login attempt on a real site.
+    ...(allBrowsers
+      ? [
+          { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
+          { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+        ]
+      : []),
   ],
 });

@@ -1,14 +1,31 @@
 {
-  "name": "hero-accounting-e2e",
-  "private": true,
+  "name": "playwright",
+  "version": "1.0.0",
+  "description": "Universal Playwright login helper and test",
+  "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:headed": "playwright test --headed",
-    "report": "playwright show-report"
+    "test:login": "playwright test tests/login.spec.ts --headed",
+    "test:login:headless": "playwright test tests/login.spec.ts",
+    "test:login:debug": "playwright test tests/login.spec.ts --headed --debug",
+    "report": "playwright show-report",
+    "install:browsers": "playwright install chromium"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Khantalha132/playwright.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Khantalha132/playwright/issues"
+  },
+  "homepage": "https://github.com/Khantalha132/playwright#readme",
   "devDependencies": {
-    "@playwright/test": "^1.48.0",
-    "@types/node": "^22.20.5",
-    "dotenv": "^16.6.1"
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^26.6.6",
+    "dotenv": "^16.4.5"
   }
 }
